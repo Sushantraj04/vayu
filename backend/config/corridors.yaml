@@ -1,0 +1,190 @@
+version: "1.0"
+corridors:
+  - id: "indo-gangetic-main"
+    name: "Indo-Gangetic Spine (Punjab-Haryana-Delhi-UP)"
+    code: "IGP_MAIN"
+    country: "India"
+    country_code: "IND"
+    aqi_standard: "cpcb_india"
+    description: "Primary trans-boundary transport corridor connecting agricultural hubs of Punjab/Haryana through the National Capital to eastern Uttar Pradesh."
+    bounding_box:
+      min_lat: 25.5
+      max_lat: 32.0
+      min_lon: 73.0
+      max_lon: 82.0
+    nodes:
+      - city: "Ludhiana"
+        state: "Punjab"
+        lat: 30.9010
+        lon: 75.8573
+        order: 1
+        is_hub: false
+        fl_node_id: "node-ludhiana"
+        fl_port: 8001
+        elevation_m: 244
+      - city: "Ambala"
+        state: "Haryana"
+        lat: 30.3782
+        lon: 76.7767
+        order: 2
+        is_hub: false
+        elevation_m: 264
+      - city: "Delhi-NCR"
+        state: "Delhi"
+        lat: 28.6139
+        lon: 77.2090
+        order: 3
+        is_hub: true
+        fl_node_id: "node-delhi"
+        fl_port: 8002
+        elevation_m: 216
+      - city: "Agra"
+        state: "Uttar Pradesh"
+        lat: 27.1767
+        lon: 78.0081
+        order: 4
+        is_hub: false
+        elevation_m: 171
+      - city: "Kanpur"
+        state: "Uttar Pradesh"
+        lat: 26.4499
+        lon: 80.3319
+        order: 5
+        is_hub: false
+        elevation_m: 126
+      - city: "Lucknow"
+        state: "Uttar Pradesh"
+        lat: 26.8467
+        lon: 80.9462
+        order: 6
+        is_hub: false
+        fl_node_id: "node-lucknow"
+        fl_port: 8003
+        elevation_m: 123
+
+  - id: "delhi-ncr-industrial"
+    name: "Delhi-NCR Industrial Belt"
+    code: "NCR_IND"
+    country: "India"
+    country_code: "IND"
+    aqi_standard: "cpcb_india"
+    description: "High-density industrial and manufacturing corridor encompassing Narela/Bawana, Gurugram, Faridabad, and Noida."
+    bounding_box:
+      min_lat: 28.1
+      max_lat: 28.9
+      min_lon: 76.8
+      max_lon: 77.6
+    nodes:
+      - city: "Narela-Bawana"
+        state: "Delhi"
+        lat: 28.8428
+        lon: 77.0950
+        order: 1
+        is_hub: false
+        elevation_m: 218
+      - city: "Delhi-Central"
+        state: "Delhi"
+        lat: 28.6139
+        lon: 77.2090
+        order: 2
+        is_hub: true
+        elevation_m: 216
+      - city: "Gurugram"
+        state: "Haryana"
+        lat: 28.4595
+        lon: 77.0266
+        order: 3
+        is_hub: false
+        elevation_m: 219
+      - city: "Faridabad"
+        state: "Haryana"
+        lat: 28.4089
+        lon: 77.3178
+        order: 4
+        is_hub: false
+        elevation_m: 204
+      - city: "Noida"
+        state: "Uttar Pradesh"
+        lat: 28.5355
+        lon: 77.3910
+        order: 5
+        is_hub: false
+        elevation_m: 200
+
+  - id: "sao-paulo-campinas"
+    name: "São Paulo–Campinas Macro-Metropolitan Corridor"
+    code: "BR_SP_CAMP"
+    country: "Brazil"
+    country_code: "BRA"
+    aqi_standard: "conama_brazil"
+    description: "Industrial, petrochemical and logistics corridor connecting the Greater São Paulo metropolitan basin through Jundiaí to the high-tech agro-industrial center of Campinas."
+    bounding_box:
+      min_lat: -23.8
+      max_lat: -22.7
+      min_lon: -47.3
+      max_lon: -46.3
+    nodes:
+      - city: "São Paulo Capital"
+        state: "São Paulo"
+        lat: -23.5505
+        lon: -46.6333
+        order: 1
+        is_hub: true
+        fl_node_id: "node-sao-paulo"
+        fl_port: 8010
+        elevation_m: 760
+      - city: "Jundiaí"
+        state: "São Paulo"
+        lat: -23.1857
+        lon: -46.8978
+        order: 2
+        is_hub: false
+        elevation_m: 715
+      - city: "Campinas"
+        state: "São Paulo"
+        lat: -22.9099
+        lon: -47.0626
+        order: 3
+        is_hub: false
+        fl_node_id: "node-campinas"
+        fl_port: 8011
+        elevation_m: 685
+
+  - id: "beijing-tianjin-hebei"
+    name: "Beijing–Tianjin–Hebei (Jing-Jin-Ji) Atmospheric Basin"
+    code: "CN_JJJ_AIR"
+    country: "China"
+    country_code: "CHN"
+    aqi_standard: "mep_china"
+    description: "Heavily industrialized air basin spanning Beijing municipality, the port city of Tianjin, and steel manufacturing complexes of Hebei province."
+    bounding_box:
+      min_lat: 38.5
+      max_lat: 41.0
+      min_lon: 115.0
+      max_lon: 118.5
+    nodes:
+      - city: "Beijing Central"
+        state: "Beijing"
+        lat: 39.9042
+        lon: 116.4074
+        order: 1
+        is_hub: true
+        fl_node_id: "node-beijing"
+        fl_port: 8020
+        elevation_m: 43
+      - city: "Langfang Industrial"
+        state: "Hebei"
+        lat: 39.5239
+        lon: 116.7044
+        order: 2
+        is_hub: false
+        elevation_m: 18
+      - city: "Tianjin Port"
+        state: "Tianjin"
+        lat: 39.0842
+        lon: 117.2009
+        order: 3
+        is_hub: false
+        fl_node_id: "node-tianjin"
+        fl_port: 8021
+        elevation_m: 5

@@ -1,0 +1,160 @@
+schemes:
+  cpcb_india:
+    name: "Central Pollution Control Board (India NAQI)"
+    country: "India"
+    reference: "CPCB Guidelines for Air Quality Index (2014)"
+    pollutant: "pm25"
+    unit: "ug/m3"
+    categories:
+      - name: "Good"
+        local_name: "अच्छा"
+        min_c: 0.0
+        max_c: 30.0
+        min_i: 0
+        max_i: 50
+        color: "#16a34a"
+        severity: "low"
+      - name: "Satisfactory"
+        local_name: "संतोषजनक"
+        min_c: 31.0
+        max_c: 60.0
+        min_i: 51
+        max_i: 100
+        color: "#65a30d"
+        severity: "moderate"
+      - name: "Moderate"
+        local_name: "मध्यम"
+        min_c: 61.0
+        max_c: 90.0
+        min_i: 101
+        max_i: 200
+        color: "#d97706"
+        severity: "elevated"
+      - name: "Poor"
+        local_name: "खराब"
+        min_c: 91.0
+        max_c: 120.0
+        min_i: 201
+        max_i: 300
+        color: "#ea580c"
+        severity: "high"
+      - name: "Very Poor"
+        local_name: "बहुत खराब"
+        min_c: 121.0
+        max_c: 250.0
+        min_i: 301
+        max_i: 400
+        color: "#dc2626"
+        severity: "critical"
+      - name: "Severe"
+        local_name: "गंभीर"
+        min_c: 251.0
+        max_c: 500.0
+        min_i: 401
+        max_i: 500
+        color: "#7f1d1d"
+        severity: "emergency"
+
+  conama_brazil:
+    name: "Conselho Nacional do Meio Ambiente (CONAMA 491/2018)"
+    country: "Brazil"
+    reference: "Resolução CONAMA nº 491/2018 - Padrões de Qualidade do Ar"
+    pollutant: "pm25"
+    unit: "ug/m3"
+    categories:
+      - name: "Boa"
+        local_name: "Boa"
+        min_c: 0.0
+        max_c: 25.0
+        min_i: 0
+        max_i: 40
+        color: "#16a34a"
+        severity: "low"
+      - name: "Moderada"
+        local_name: "Moderada"
+        min_c: 25.1
+        max_c: 50.0
+        min_i: 41
+        max_i: 80
+        color: "#d97706"
+        severity: "moderate"
+      - name: "Ruim"
+        local_name: "Ruim"
+        min_c: 50.1
+        max_c: 75.0
+        min_i: 81
+        max_i: 120
+        color: "#ea580c"
+        severity: "high"
+      - name: "Muito Ruim"
+        local_name: "Muito Ruim"
+        min_c: 75.1
+        max_c: 125.0
+        min_i: 121
+        max_i: 200
+        color: "#dc2626"
+        severity: "critical"
+      - name: "Péssima"
+        local_name: "Péssima"
+        min_c: 125.1
+        max_c: 300.0
+        min_i: 201
+        max_i: 300
+        color: "#7f1d1d"
+        severity: "emergency"
+
+  mep_china:
+    name: "Ministry of Ecology and Environment (China HJ 633-2012)"
+    country: "China"
+    reference: "Technical Regulation on Ambient Air Quality Index (HJ 633-2012)"
+    pollutant: "pm25"
+    unit: "ug/m3"
+    categories:
+      - name: "Excellent"
+        local_name: "优"
+        min_c: 0.0
+        max_c: 35.0
+        min_i: 0
+        max_i: 50
+        color: "#16a34a"
+        severity: "low"
+      - name: "Good"
+        local_name: "良"
+        min_c: 35.1
+        max_c: 75.0
+        min_i: 51
+        max_i: 100
+        color: "#65a30d"
+        severity: "moderate"
+      - name: "Lightly Polluted"
+        local_name: "轻度污染"
+        min_c: 75.1
+        max_c: 115.0
+        min_i: 101
+        max_i: 150
+        color: "#d97706"
+        severity: "elevated"
+      - name: "Moderately Polluted"
+        local_name: "中度污染"
+        min_c: 115.1
+        max_c: 150.0
+        min_i: 151
+        max_i: 200
+        color: "#ea580c"
+        severity: "high"
+      - name: "Heavily Polluted"
+        local_name: "重度污染"
+        min_c: 150.1
+        max_c: 250.0
+        min_i: 201
+        max_i: 300
+        color: "#dc2626"
+        severity: "critical"
+      - name: "Severely Polluted"
+        local_name: "严重污染"
+        min_c: 250.1
+        max_c: 500.0
+        min_i: 301
+        max_i: 500
+        color: "#7f1d1d"
+        severity: "emergency"

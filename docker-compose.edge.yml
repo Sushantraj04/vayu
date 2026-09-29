@@ -1,0 +1,53 @@
+version: "3.9"
+
+# ==============================================================================
+# VAYU-NET: Edge Municipal Airshed Profile
+# Designed for lightweight single-node deployment (<1GB RAM)
+# Perfect for municipal health departments, regional universities, or edge IoT gateways.
+# ==============================================================================
+
+services:
+  edge_backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: vayunet_edge_backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: "sqlite+aiosqlite:///data/vayunet_edge.db"
+      SYNC_DATABASE_URL: "sqlite:///data/vayunet_edge.db"
+      ENVIRONMENT: "production-edge"
+      FL_NODE_ID: "${FL_NODE_ID:-edge-node-local}"
+      FL_COORDINATOR_URL: "${FL_COORDINATOR_URL:-http://central-coordinator:8005}"
+    volumes:
+      - edge_data:/app/data
+      - ./backend/config:/app/backend/config:ro
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - vayunet_edge_net
+
+  edge_frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: vayunet_edge_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - edge_backend
+    networks:
+      - vayunet_edge_net
+
+networks:
+  vayunet_edge_net:
+    driver: bridge
+
+volumes:
+  edge_data:

@@ -1,0 +1,93 @@
+{
+  "app": {
+    "name": "VAYU-NET",
+    "tagline": "Indo-Gangetic Air Quality & Pollution Intelligence Platform",
+    "dpg_badge": "Digital Public Good",
+    "live_status": "Operational",
+    "search_placeholder": "Search city, station, or coordinate (Ctrl+K)...",
+    "switch_role": "Switch Role"
+  },
+  "roles": {
+    "public": "Public / Citizen",
+    "authority": "Authority (Situation Room)",
+    "analyst": "Analyst / Modeler",
+    "admin": "System Administrator",
+    "partner": "BRICS Partner"
+  },
+  "nav": {
+    "air_near_me": "Air Near Me",
+    "situation_room": "Situation Room",
+    "corridor_overview": "Corridors",
+    "citizen_reports": "Citizen Reports",
+    "alerts_queue": "Alerts & Directives",
+    "model_performance": "Model Performance",
+    "data_sources": "Data Sources & Quality",
+    "federated_network": "Federated Network",
+    "settings": "Settings",
+    "api_docs": "API & Docs"
+  },
+  "aqi": {
+    "good": "Good",
+    "satisfactory": "Satisfactory",
+    "moderate": "Moderate",
+    "poor": "Poor",
+    "very_poor": "Very Poor",
+    "severe": "Severe",
+    "insufficient_data": "Insufficient Data",
+    "modelled_notice": "Modelled Atmospheric Estimate (No local sensor)"
+  },
+  "situation_room": {
+    "corridor_risk_index": "Corridor Risk Index",
+    "active_hotspots": "Active Hotspots",
+    "active_fires": "Active Fires (VIIRS)",
+    "worst_city": "Highest AQI Along Spine",
+    "layers": "Map Overlays",
+    "layer_stations": "Ground Monitoring Stations",
+    "layer_fires": "Active Fire Detections (VIIRS)",
+    "layer_hotspots": "AI Hotspot Clusters",
+    "layer_wind": "Atmospheric Wind Vectors",
+    "layer_corridor": "Economic Corridor Spine",
+    "layer_reports": "Verified Citizen Reports",
+    "layer_gibs_truecolor": "Satellite TrueColor (GIBS)",
+    "layer_gibs_aod": "Aerosol Optical Depth (AOD)",
+    "time_slider": "Forecast Horizon",
+    "now": "Current (Now)",
+    "plus_24h": "+24 Hours",
+    "plus_48h": "+48 Hours",
+    "plus_72h": "+72 Hours"
+  },
+  "citizen": {
+    "report_button": "Report Smoke / Fire",
+    "report_title": "Citizen Pollution Report",
+    "photo_label": "Upload or Capture Photo",
+    "category_label": "Pollution Category",
+    "cat_smoke": "Thick Smoke / Plume",
+    "cat_burning": "Open Crop / Biomass Burning",
+    "cat_dust": "Heavy Road / Construction Dust",
+    "cat_industrial": "Industrial Emission",
+    "cat_other": "Other Smog Source",
+    "location_label": "Incident Location",
+    "consent_label": "I consent to anonymous public mapping under the 500m privacy grid",
+    "submit_report": "Submit Verified Report",
+    "privacy_notice": "Privacy by Design: All EXIF device data is sanitized. Exact coordinates are rounded to 500 meters to protect citizen privacy."
+  },
+  "sources": {
+    "title": "Data Source Health & Provenance",
+    "openaq": "OpenAQ Ground Telemetry",
+    "firms": "NASA FIRMS VIIRS Radiometry",
+    "meteo": "Open-Meteo Atmospheric Model",
+    "gibs": "NASA GIBS Satellite Imagery",
+    "measured": "Measured (Ground Sensor)",
+    "modelled": "Modelled (Atmospheric Math)"
+  },
+  "common": {
+    "refresh": "Refresh Data",
+    "last_sync": "Last Sync",
+    "acknowledge": "Acknowledge",
+    "resolve": "Resolve",
+    "evidence": "Evidence & Reasoning",
+    "no_data": "No telemetry currently available for this coordinate.",
+    "loading": "Retrieving real-time observations...",
+    "error": "Failed to connect to regional data stream."
+  }
+}
