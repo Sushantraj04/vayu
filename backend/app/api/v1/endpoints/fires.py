@@ -11,7 +11,7 @@ router = APIRouter()
 
 @router.get("/")
 async def list_active_fires(
-    hours: int = Query(24, ge=1, le=72, description="Lookback window in hours (default 24h, max 72h)"),
+    hours: int = Query(24, ge=1, le=168, description="Lookback window in hours (default 24h, max 168h)"),
     min_frp: float = Query(0.0, ge=0.0, description="Minimum Fire Radiative Power (MW)"),
     limit: int = Query(500, ge=1, le=2000),
     db: AsyncSession = Depends(get_db)

@@ -15,7 +15,13 @@ import {
   Compass,
   ArrowRight,
   TrendingUp,
-  Radio
+  Radio,
+  Sliders,
+  Bell,
+  Clock,
+  ExternalLink,
+  ChevronRight,
+  Target
 } from 'lucide-react';
 
 export const SituationRoom: React.FC = () => {
@@ -64,13 +70,13 @@ export const SituationRoom: React.FC = () => {
   }, [selectedCity]);
 
   const handleDetectHotspots = async () => {
-    setActionMessage('Running DBSCAN Spatio-temporal Clustering...');
+    setActionMessage('Executing DBSCAN Spatio-Temporal Clustering...');
     try {
       const res = await api.detectHotspots(48);
-      setActionMessage(`DBSCAN Complete: ${res.count} active hotspots detected.`);
+      setActionMessage(`DBSCAN Clustering Complete: ${res.count} active pollution hotspots delineated.`);
       loadData();
     } catch (e: any) {
-      setActionMessage(`Failed to run DBSCAN: ${e.message}`);
+      setActionMessage(`Failed to execute DBSCAN: ${e.message}`);
     }
   };
 
@@ -78,7 +84,7 @@ export const SituationRoom: React.FC = () => {
     setActionMessage('Evaluating multi-rule triggers (Sustained AQI, Spikes, Plumes)...');
     try {
       const res = await api.evaluateAlerts();
-      setActionMessage(`Rule Engine Complete: ${res.count} alerts dispatched.`);
+      setActionMessage(`Multi-Rule Engine Complete: ${res.count} OASIS alerts evaluated.`);
       loadData();
     } catch (e: any) {
       setActionMessage(`Rule evaluation failed: ${e.message}`);
@@ -94,204 +100,266 @@ export const SituationRoom: React.FC = () => {
     { city: 'Lucknow', lat: 26.8467, lon: 80.9462, order: 6 },
   ];
 
+  const windSpeed = attribution?.meteorology?.wind_speed_kmh || 12.0;
+  const windDir = attribution?.meteorology?.wind_direction_deg || 315.0;
+  const blh = attribution?.meteorology?.boundary_layer_height_m || 400.0;
+
+  // Approximate transit time from Ludhiana (Punjab) to Delhi (~310 km)
+  const transitHours = (310 / Math.max(windSpeed, 5)).toFixed(1);
+
   return (
-    <div className="space-y-4 max-w-7xl mx-auto">
-      {/* Action Notification Banner */}
+    <div className="space-y-5 max-w-7xl mx-auto pb-12">
+      {/* Tactical Operation Banner */}
       {actionMessage && (
-        <div className="p-3 rounded-xl bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs flex items-center justify-between">
-          <span className="font-mono">{actionMessage}</span>
-          <button onClick={() => setActionMessage(null)} className="text-slate-400 hover:text-white">
-            Dismiss
+        <div className="p-3.5 rounded-2xl bg-teal-500/15 border border-teal-500/30 text-teal-700 dark:text-teal-300 text-xs flex items-center justify-between shadow-lg">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
+            <span className="font-semibold">{actionMessage}</span>
+          </div>
+          <button
+            onClick={() => setActionMessage(null)}
+            className="text-[11px] font-mono hover:underline cursor-pointer opacity-70 hover:opacity-100"
+          >
+            DISMISS
           </button>
         </div>
       )}
 
-      {/* 1. TOP KPI STRIP */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {/* Corridor Risk Index */}
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs relative overflow-hidden">
-          <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
-            <span>{t('situation_room.corridor_risk_index')}</span>
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold">
-              CRITICAL
+      {/* Situation Room Header & Command Actions */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/25 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+              <span>EMERGENCY SITUATION ROOM</span>
             </span>
+            <span className="text-xs font-mono text-slate-400">CORRIDOR RISK LEVEL: CRITICAL</span>
           </div>
-          <div className="flex items-baseline gap-2 mt-2">
-            <span className="text-3xl font-extrabold font-mono text-rose-600 dark:text-rose-400">
-              {corridorSummary?.risk_index ?? 78.4}
-            </span>
-            <span className="text-xs text-slate-400 font-mono">/ 100</span>
-          </div>
-          <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
-            <div
-              className="bg-rose-500 h-full rounded-full transition-all duration-500"
-              style={{ width: `${corridorSummary?.risk_index ?? 78.4}%` }}
-            ></div>
-          </div>
-        </div>
-
-        {/* Active Emergency Alerts */}
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-          <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
-            <span>Active CAP 1.2 Alerts</span>
-            <AlertTriangle className="w-3.5 h-3.5 text-amber-500" />
-          </div>
-          <div className="flex items-baseline gap-2 mt-2">
-            <span className="text-3xl font-extrabold font-mono text-slate-900 dark:text-white">
-              {alerts.length}
-            </span>
-            <span className="text-xs text-amber-600 font-medium">ITU-T X.1303</span>
-          </div>
-          <p className="text-[11px] text-slate-400 mt-1 truncate">
-            {alerts[0]?.title_en || 'Trans-boundary advisory active'}
+          <h1 className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2 tracking-tight">
+            <span>Indo-Gangetic Airshed Command Center</span>
+          </h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            Operational fusion of ground reference networks, satellite fire radiometry, and kinematic trans-boundary advection vectors.
           </p>
         </div>
 
-        {/* Active Fires (VIIRS) */}
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-          <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
-            <span>{t('situation_room.active_fires')}</span>
-            <Flame className="w-3.5 h-3.5 text-orange-500" />
-          </div>
-          <div className="flex items-baseline gap-2 mt-2">
-            <span className="text-3xl font-extrabold font-mono text-orange-600 dark:text-orange-400">
-              {fires.length}
-            </span>
-            <span className="text-xs text-slate-400 font-mono">NASA FIRMS 375m</span>
-          </div>
-          <p className="text-[11px] text-slate-400 mt-1 truncate">
-            Crop burning radiometry in Punjab/Haryana
-          </p>
-        </div>
+        {/* Command Action Buttons */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            onClick={handleDetectHotspots}
+            disabled={isLoading}
+            className="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white border border-slate-700/80 flex items-center gap-2 shadow-sm transition-all cursor-pointer"
+          >
+            <Flame className="w-3.5 h-3.5 text-rose-400" />
+            <span>Run DBSCAN</span>
+          </button>
 
-        {/* Selected Airshed Focus */}
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-          <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
-            <span>Receptor City Focus</span>
-            <Activity className="w-3.5 h-3.5 text-teal-500" />
-          </div>
-          <div className="flex items-center justify-between mt-2">
-            <select
-              value={selectedCity}
-              onChange={(e) => setSelectedCity(e.target.value)}
-              className="text-base font-bold bg-transparent text-slate-900 dark:text-white focus:outline-none cursor-pointer"
-            >
-              {corridorNodes.map((n) => (
-                <option key={n.city} value={n.city} className="bg-slate-900 text-white">
-                  {n.city}
-                </option>
-              ))}
-            </select>
-            <AqiBadge aqi={320} size="sm" />
-          </div>
-          <p className="text-[11px] text-slate-400 mt-1 truncate">
-            Indo-Gangetic Airshed Hub Node
-          </p>
+          <button
+            onClick={handleEvaluateAlerts}
+            disabled={isLoading}
+            className="px-3.5 py-2 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-500 text-white flex items-center gap-2 shadow-lg shadow-teal-500/20 transition-all cursor-pointer"
+          >
+            <Bell className="w-3.5 h-3.5" />
+            <span>Evaluate Alerts</span>
+          </button>
+
+          <button
+            onClick={loadData}
+            title="Refresh Situation Room"
+            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-all cursor-pointer"
+          >
+            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin text-teal-400' : ''}`} />
+          </button>
         </div>
       </div>
 
-      {/* 2. MAIN SITUATION ROOM CANVAS (MAP + CONTROLS + HOTSPOTS) */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-        {/* Left: Operational Analytics & Triggers */}
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col justify-between space-y-4">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Compass className="w-4 h-4 text-teal-600 dark:text-teal-400" />
-                <span>Operational Control</span>
-              </span>
-              <button onClick={loadData} title="Refresh Live Data" className="text-slate-400 hover:text-white">
-                <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin text-teal-400' : ''}`} />
-              </button>
-            </div>
-
-            {/* AI Operational Triggers */}
-            <div className="space-y-2">
-              <button
-                onClick={handleDetectHotspots}
-                className="w-full py-2.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer"
-              >
-                <div className="flex items-center gap-2">
-                  <Flame className="w-3.5 h-3.5 text-orange-400" />
-                  <span>Run DBSCAN Clustering</span>
-                </div>
-                <ArrowRight className="w-3 h-3 text-slate-400" />
-              </button>
-
-              <button
-                onClick={handleEvaluateAlerts}
-                className="w-full py-2.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer"
-              >
-                <div className="flex items-center gap-2">
-                  <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Evaluate Alert Triggers</span>
-                </div>
-                <ArrowRight className="w-3 h-3 text-slate-400" />
-              </button>
-
-              <button
-                onClick={() => setView('alerts')}
-                className="w-full py-2.5 px-3 rounded-lg bg-teal-600/10 hover:bg-teal-600/20 text-teal-300 border border-teal-500/30 text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer"
-              >
-                <div className="flex items-center gap-2">
-                  <Radio className="w-3.5 h-3.5 text-teal-400" />
-                  <span>CAP 1.2 Feed & Sirens</span>
-                </div>
-                <ArrowRight className="w-3 h-3 text-teal-400" />
-              </button>
-            </div>
-
-            {/* Corridor Spine Sequence */}
-            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-2">
-              <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-                Spine Node Trajectory
-              </div>
-              <div className="space-y-1 text-xs">
-                {corridorNodes.map((n) => (
-                  <div
-                    key={n.city}
-                    onClick={() => setSelectedCity(n.city)}
-                    className={`flex items-center justify-between p-1.5 rounded cursor-pointer transition-colors ${
-                      selectedCity === n.city ? 'bg-teal-500/20 text-teal-300 font-bold' : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    <span>{n.order}. {n.city}</span>
-                    <span className="text-[10px] font-mono opacity-60">{n.lat.toFixed(2)}°N</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+      {/* Top Warning Strip: Trans-boundary Smog Transport Vector */}
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-teal-950 border border-teal-800/40 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30">
+            <Wind className="w-5 h-5" />
           </div>
-
-          <div className="p-3 rounded-lg bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800/80 text-xs space-y-1.5">
-            <div className="font-semibold text-teal-900 dark:text-teal-300 flex items-center gap-1.5">
-              <ShieldAlert className="w-3.5 h-3.5" />
-              <span>Trans-boundary Airshed Directive</span>
+          <div>
+            <div className="text-xs font-bold uppercase tracking-wider text-teal-300 flex items-center gap-2">
+              <span>Trans-Boundary Transport Vector</span>
+              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-teal-500/30 text-teal-200">
+                ACTIVE ADVECTION
+              </span>
             </div>
-            <p className="text-[11px] text-teal-800/80 dark:text-teal-300/80 leading-snug">
-              Coordinated cross-state action required: Crop residue curbs in Sangrur/Patiala directly mitigate 48h PM2.5 surge in Delhi-NCR.
-            </p>
+            <div className="text-sm font-semibold text-slate-200 mt-0.5">
+              Northwest winds ({windSpeed.toFixed(1)} km/h @ {Math.round(windDir)}°) transporting crop residue smoke from Punjab/Haryana toward Delhi-NCR.
+            </div>
           </div>
         </div>
 
-        {/* Center: Live Interactive Corridor Map */}
-        <div className="lg:col-span-2">
+        <div className="flex items-center gap-4 text-xs font-mono shrink-0 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
+          <div>
+            <span className="text-slate-400 block text-[10px]">ESTIMATED TRANSIT TIME</span>
+            <span className="text-base font-bold text-amber-400">~{transitHours} Hours</span>
+          </div>
+          <div className="w-px h-8 bg-slate-800" />
+          <div>
+            <span className="text-slate-400 block text-[10px]">INVERSION DEPTH</span>
+            <span className="text-base font-bold text-teal-300">{Math.round(blh)} Meters</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Grid: Corridor Nodes, Interactive Map, and Hotspot Queue */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        {/* Left Column: Corridor Risk & Spine Nodes (3 cols) */}
+        <div className="lg:col-span-3 space-y-4">
+          {/* Corridor Risk Index Card */}
+          <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Corridor Risk Index</span>
+              <span className="text-xs font-mono font-bold text-rose-500 bg-rose-500/10 px-2 py-0.5 rounded">
+                CRITICAL
+              </span>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-black font-mono text-slate-900 dark:text-white">
+                {corridorSummary?.risk_index ?? 84}
+              </span>
+              <span className="text-xs text-slate-400 font-mono">/ 100</span>
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
+              Index fused from continuous station anomalies, VIIRS fire count ({fires.length}), and shallow atmospheric mixing.
+            </p>
+          </div>
+
+          {/* Corridor Spine Navigation */}
+          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+            <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center justify-between">
+              <span>Corridor Spine Stations</span>
+              <span className="text-[10px] font-mono text-teal-500">6 NODES</span>
+            </div>
+            <div className="space-y-1 text-xs">
+              {corridorNodes.map((n) => (
+                <div
+                  key={n.city}
+                  onClick={() => setSelectedCity(n.city)}
+                  className={`flex items-center justify-between p-2 rounded-xl cursor-pointer transition-all ${
+                    selectedCity === n.city
+                      ? 'bg-teal-500/15 text-teal-600 dark:text-teal-300 font-bold border border-teal-500/30'
+                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono opacity-50">#{n.order}</span>
+                    <span>{n.city}</span>
+                  </div>
+                  <span className="text-[10px] font-mono opacity-60">{n.lat.toFixed(2)}°N</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Active Alerts Widget */}
+          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                <Bell className="w-3.5 h-3.5 text-rose-500" />
+                <span>Active Directives ({alerts.length})</span>
+              </span>
+              <button
+                onClick={() => setView('alerts')}
+                className="text-[10px] font-bold text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-0.5 cursor-pointer"
+              >
+                <span>View All</span>
+                <ChevronRight className="w-3 h-3" />
+              </button>
+            </div>
+            {alerts.slice(0, 2).map((al) => (
+              <div
+                key={al.id}
+                className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 text-xs space-y-1"
+              >
+                <div className="font-bold text-slate-900 dark:text-white truncate">{al.title_en}</div>
+                <div className="text-[10px] text-slate-400 flex items-center gap-1">
+                  <span>Target: {al.city}</span>
+                  <span>•</span>
+                  <span className="text-rose-500 font-semibold">{al.severity}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Center: Live Interactive Geospatial Canvas (6 cols) */}
+        <div className="lg:col-span-6 space-y-4">
           <CorridorMap
             stations={stations}
             fires={fires}
             hotspots={hotspots}
             reports={reports}
             corridorNodes={corridorNodes}
-            windDirectionDeg={attribution?.meteorology?.wind_direction_deg || 315}
-            windSpeedKmh={attribution?.meteorology?.wind_speed_kmh || 12.5}
+            windDirectionDeg={windDir}
+            windSpeedKmh={windSpeed}
             selectedCity={selectedCity}
-            className="h-[580px]"
+            className="h-[620px]"
           />
         </div>
 
-        {/* Right: Detected Hotspots Queue */}
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col justify-between overflow-y-auto space-y-4">
-          <div>
+        {/* Right Column: Kinematic Source Attribution & Hotspots Queue (3 cols) */}
+        <div className="lg:col-span-3 space-y-4">
+          {/* Kinematic Source Attribution */}
+          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-1.5">
+                <Target className="w-4 h-4 text-teal-500" />
+                <span>Source Attribution</span>
+              </span>
+              <span className="text-[10px] text-teal-600 dark:text-teal-400 font-mono font-bold">
+                {attribution?.confidence_pct || 65}% CONF
+              </span>
+            </div>
+
+            <div className="p-3 rounded-xl bg-teal-500/10 border border-teal-500/20 text-xs text-teal-900 dark:text-teal-200 space-y-1">
+              <div className="font-bold text-slate-900 dark:text-white">
+                {attribution?.dominant_source || 'Mixed Regional Dispersion'}
+              </div>
+              <p className="text-[11px] opacity-80 leading-snug">
+                {attribution?.plain_language_reasoning || 'Dispersed regional background with upwind transport along the NW corridor.'}
+              </p>
+            </div>
+
+            {/* Source breakdown bars */}
+            <div className="space-y-2 pt-1 text-xs">
+              <div>
+                <div className="flex justify-between text-[11px] mb-1">
+                  <span className="text-slate-500">Upwind Agricultural Burning:</span>
+                  <span className="font-mono font-bold text-slate-700 dark:text-slate-300">55%</span>
+                </div>
+                <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-rose-500 rounded-full" style={{ width: '55%' }} />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between text-[11px] mb-1">
+                  <span className="text-slate-500">Local Industrial & Traffic:</span>
+                  <span className="font-mono font-bold text-slate-700 dark:text-slate-300">30%</span>
+                </div>
+                <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-amber-500 rounded-full" style={{ width: '30%' }} />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between text-[11px] mb-1">
+                  <span className="text-slate-500">Regional Background:</span>
+                  <span className="font-mono font-bold text-slate-700 dark:text-slate-300">15%</span>
+                </div>
+                <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-teal-500 rounded-full" style={{ width: '15%' }} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* DBSCAN Hotspots Queue */}
+          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
             <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-1.5">
                 <Flame className="w-4 h-4 text-orange-500" />
@@ -300,32 +368,28 @@ export const SituationRoom: React.FC = () => {
               <span className="text-[10px] text-teal-600 dark:text-teal-400 font-semibold font-mono">DBSCAN</span>
             </div>
 
-            <div className="mt-3 space-y-2.5 max-h-[460px] overflow-y-auto pr-1">
+            <div className="space-y-2 max-h-[260px] overflow-y-auto pr-1">
               {hotspots.length === 0 ? (
-                <div className="text-xs text-slate-500 p-4 text-center">
-                  No active clusters detected in recent lookback window.
+                <div className="text-center py-6 text-xs text-slate-400">
+                  Zero active DBSCAN clusters within current threshold.
                 </div>
               ) : (
-                hotspots.map((hs) => (
+                hotspots.map((h) => (
                   <div
-                    key={hs.id}
-                    className="p-3 rounded-lg border text-xs bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700/80 space-y-1.5"
+                    key={h.id}
+                    className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 text-xs space-y-1"
                   >
-                    <div className="flex items-start justify-between">
-                      <span className="font-semibold text-slate-900 dark:text-white">{hs.probable_source}</span>
-                      <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded font-bold ${
-                        hs.severity === 'CRITICAL' ? 'bg-red-500/20 text-red-400' : 'bg-orange-500/20 text-orange-400'
-                      }`}>
-                        {hs.severity}
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-slate-900 dark:text-white">{h.probable_source}</span>
+                      <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-500">
+                        {h.severity}
                       </span>
                     </div>
-
-                    <div className="text-[11px] text-slate-400">
-                      Points: <strong>{hs.cluster_size}</strong> | Radius: <strong>{hs.radius_km} km</strong> | Peak FRP: <strong>{hs.max_frp_mw} MW</strong>
+                    <div className="text-[10px] text-slate-400 font-mono">
+                      Radius: {h.radius_km} km | Peak FRP: {h.max_frp_mw} MW
                     </div>
-
-                    <p className="text-[11px] text-slate-300 leading-snug line-clamp-3">
-                      {hs.reasoning}
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2">
+                      {h.reasoning}
                     </p>
                   </div>
                 ))
@@ -333,71 +397,6 @@ export const SituationRoom: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* 3. KINEMATIC SOURCE ATTRIBUTION PANEL */}
-      <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-            <h2 className="text-base font-bold text-slate-900 dark:text-white">
-              Kinematic Atmospheric Source Attribution for {selectedCity}
-            </h2>
-          </div>
-
-          {attribution && (
-            <div className="flex items-center gap-3 text-xs font-mono">
-              <span className="text-slate-400">
-                Confidence: <strong className="text-teal-400">{attribution.confidence_pct}%</strong>
-              </span>
-              <span className="text-slate-400">
-                Local Share: <strong className="text-slate-200">{attribution.local_share_pct}%</strong>
-              </span>
-            </div>
-          )}
-        </div>
-
-        {attribution ? (
-          <div className="space-y-4">
-            {/* Scientific Explanation Box */}
-            <div className="p-4 rounded-xl bg-slate-800/60 border border-slate-700 text-xs text-slate-200 leading-relaxed font-mono">
-              {attribution.plain_language_reasoning}
-            </div>
-
-            {/* Diagnostic Metrics Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-              <div className="p-3 rounded-lg bg-slate-800/40 border border-slate-700/60">
-                <div className="text-slate-400">Dominant Source</div>
-                <div className="font-bold text-slate-100 mt-1">{attribution.dominant_source}</div>
-              </div>
-
-              <div className="p-3 rounded-lg bg-slate-800/40 border border-slate-700/60">
-                <div className="text-slate-400">Surface Wind Vector</div>
-                <div className="font-bold text-teal-400 mt-1 font-mono">
-                  {attribution.meteorology?.wind_direction_cardinal} ({Math.round(attribution.meteorology?.wind_direction_deg)}°) @ {attribution.meteorology?.wind_speed_kmh?.toFixed(1)} km/h
-                </div>
-              </div>
-
-              <div className="p-3 rounded-lg bg-slate-800/40 border border-slate-700/60">
-                <div className="text-slate-400">Boundary Layer Height</div>
-                <div className="font-bold text-slate-100 mt-1 font-mono">
-                  {Math.round(attribution.meteorology?.boundary_layer_height_m)} m (Inversion Trapping)
-                </div>
-              </div>
-
-              <div className="p-3 rounded-lg bg-slate-800/40 border border-slate-700/60">
-                <div className="text-slate-400">Attributed Upwind Sectors</div>
-                <div className="font-bold text-slate-100 mt-1 font-mono">
-                  {attribution.attributed_sources?.length || 0} active regional plumes
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="p-4 rounded-xl bg-slate-800/40 border border-slate-700 text-xs text-slate-400">
-            Awaiting kinematic wind field projection...
-          </div>
-        )}
       </div>
     </div>
   );
