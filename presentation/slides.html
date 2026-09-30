@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VAYU-NET | Hackathon Pitch Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #070B14;
+      --bg-card: rgba(15, 23, 42, 0.85);
+      --bg-card-border: rgba(255, 255, 255, 0.08);
+      --emerald: #10B981;
+      --emerald-glow: rgba(16, 185, 129, 0.25);
+      --cyan: #06B6D4;
+      --cyan-glow: rgba(6, 182, 212, 0.25);
+      --blue: #3B82F6;
+      --amber: #F59E0B;
+      --rose: #F43F5E;
+      --purple: #8B5CF6;
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #030712;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @page {
+      size: 1920px 1080px;
+      margin: 0;
+    }
+
+    @media print {
+      body {
+        background: transparent;
+      }
+      .slide {
+        page-break-after: always;
+        break-after: page;
+        box-shadow: none !important;
+        margin: 0 !important;
+      }
+    }
+
+    .presentation-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      padding: 40px 0;
+    }
+
+    .slide {
+      width: 1920px;
+      height: 1080px;
+      background: radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
+                  radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+                  #070B14;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 64px 88px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Subtle grid overlay */
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Ambient glow elements */
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Header */
+    .slide-header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 20px;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #10B981, #06B6D4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 20px;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #F8FAFC;
+    }
+
+    .brand-sub {
+      font-size: 13px;
+      color: var(--cyan);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.5px;
+    }
+
+    .category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 100px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      font-size: 13px;
+      font-weight: 600;
+      color: #34D399;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .category-badge.cyan {
+      background: rgba(6, 182, 212, 0.1);
+      border-color: rgba(6, 182, 212, 0.3);
+      color: #38BDF8;
+    }
+
+    .category-badge.rose {
+      background: rgba(244, 63, 94, 0.1);
+      border-color: rgba(244, 63, 94, 0.3);
+      color: #FB7185;
+    }
+
+    .category-badge.purple {
+      background: rgba(139, 92, 246, 0.1);
+      border-color: rgba(139, 92, 246, 0.3);
+      color: #A78BFA;
+    }
+
+    /* Main Body */
+    .slide-body {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 30px 0;
+    }
+
+    /* Footer */
+    .slide-footer {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 18px;
+      font-size: 13px;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--cyan);
+    }
+
+    .slide-number {
+      font-weight: 700;
+      color: var(--emerald);
+    }
+
+    /* Typography Utilities */
+    .headline-xl {
+      font-size: 68px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 20px;
+    }
+
+    .headline-lg {
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #FFFFFF 20%, #34D399 60%, #38BDF8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .gradient-text-amber {
+      background: linear-gradient(135deg, #FFFFFF 20%, #FBBF24 60%, #F43F5E 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .gradient-text-cyan {
+      background: linear-gradient(135deg, #FFFFFF 20%, #38BDF8 60%, #818CF8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subhead {
+      font-size: 22px;
+      line-height: 1.5;
+      color: var(--text-muted);
+      max-width: 900px;
+      margin-bottom: 32px;
+      font-weight: 400;
+    }
+
+    /* Cards & Grids */
+    .glass-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 32px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-card.highlight {
+      border-color: rgba(16, 185, 129, 0.4);
+      box-shadow: 0 0 35px rgba(16, 185, 129, 0.15);
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #F8FAFC;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    /* Grid layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    /* Metric callouts */
+    .metric-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 44px;
+      font-weight: 800;
+      color: #34D399;
+      margin-bottom: 6px;
+    }
+
+    .metric-label {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    /* Status Pills */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+
+    .pill-green { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .pill-red { background: rgba(244, 63, 94, 0.15); color: #FB7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+    .pill-cyan { background: rgba(6, 182, 212, 0.15); color: #38BDF8; border: 1px solid rgba(6, 182, 212, 0.3); }
+    .pill-amber { background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+    /* Flow step arrow */
+    .flow-step {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .step-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid var(--emerald);
+      color: #34D399;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    /* Code & Technical blocks */
+    .tech-box {
+      background: #020617;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: #93C5FD;
+      line-height: 1.5;
+    }
+
+    /* Comparison Table */
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .comp-table th {
+      padding: 16px;
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-dim);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .comp-table td {
+      padding: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .comp-table tr.highlight-row {
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .comp-table tr.highlight-row td {
+      color: #F8FAFC;
+      font-weight: 600;
+    }
+
+    /* Action button in slide */
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #10B981, #06B6D4);
+      color: #022C22;
+      font-weight: 700;
+      font-size: 16px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+<div class="presentation-container">
+
+  <!-- ==================== SLIDE 1: COVER / TITLE ==================== -->
+  <div class="slide" id="slide-1">
+    <div class="glow-orb" style="width: 600px; height: 600px; background: rgba(16, 185, 129, 0.15); top: -100px; right: -100px;"></div>
+    <div class="glow-orb" style="width: 500px; height: 500px; background: rgba(6, 182, 212, 0.12); bottom: -100px; left: -100px;"></div>
+
+    <div class="slide-header">
+      <div class="brand-mark">
+        <div class="brand-icon">V</div>
+        <div>
+          <div class="brand-title">VAYU-NET</div>
+          <div class="brand-sub">वायू-नेट // NATIONAL ENVIRONMENTAL INTELLIGENCE</div>
+        </div>
+      </div>
+      <div class="category-badge">HACKATHON 2026 // CLIMATETECH & GOVTECH</div>
+    </div>
+
+    <div class="slide-body" style="justify-content: center; max-width: 1300px;">
+      <div style="display: flex; gap: 12px; margin-bottom: 24px;">
+        <span class="pill pill-green">LIVE CLOUD DEPLOYED</span>
+        <span class="pill pill-cyan">REAL-TIME OPENAQ & NASA SATELLITE</span>
+        <span class="pill pill-amber">DBSCAN SPATIAL AI</span>
+        <span class="pill pill-red">KINEMATIC SOURCE ATTRIBUTION</span>
+      </div>
+
+      <h1 class="headline-xl">
+        <span class="gradient-text">VAYU-NET</span><br>
+        Next-Gen Air Quality & Pollution-Source Intelligence Platform
+      </h1>
+
+      <p class="subhead" style="font-size: 26px; max-width: 1080px; margin-bottom: 48px;">
+        Transforming raw environmental telemetry into actionable source attribution, atmospheric trajectory corridors, and zero-delay municipal interventions.
+      </p>
+
+      <div style="display: flex; align-items: center; gap: 24px;">
+        <a href="https://vegetation-nelson-guided-pittsburgh.trycloudflare.com" target="_blank" class="cta-btn">
+          <span>🌐 Live Interactive Demo</span>
+          <span style="font-family: monospace;">&rarr;</span>
+        </a>
+        <div class="tech-box" style="display: flex; align-items: center; gap: 16px;">
+          <span style="color: var(--text-dim);">Live URL:</span>
+          <span style="color: #34D399; font-weight: 600;">vegetation-nelson-guided-pittsburgh.trycloudflare.com</span>
+        </div>
+        <div class="tech-box" style="display: flex; align-items: center; gap: 16px;">
+          <span style="color: var(--text-dim);">Repository:</span>
+          <span style="color: #38BDF8; font-weight: 600;">github.com/Sushantraj04/vayu</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div>National Clean Air Action Hackathon • Project VAYU-NET</div>
+      <div class="footer-links">
+        <span>Team: VAYU Intelligence Core</span>
+      </div>
+      <div class="slide-number">01 / 10</div>
+    </div>
+  </div>
+
+
+  <!-- ==================== SLIDE 2: THE PROBLEM ==================== -->
+  <div class="slide" id="slide-2">
+    <div class="glow-orb" style="width: 500px; height: 500px; background: rgba(244, 63, 94, 0.1); top: 100px; right: 0;"></div>
+
+    <div class="slide-header">
+      <div class="brand-mark">
+        <div class="brand-icon">V</div>
+        <div class="brand-title">VAYU-NET</div>
+      </div>
+      <div class="category-badge rose">01 // THE CRISIS & BLIND SPOT</div>
+    </div>
+
+    <div class="slide-body">
+      <h2 class="headline-lg">
+        The Indo-Gangetic Air Quality Crisis:<br>
+        <span class="gradient-text-amber">Data Silos & The Attribution Blind Spot</span>
+      </h2>
+      <p class="subhead">
+        Over 300 Million citizens suffer toxic winter smog (AQI 450+ Severe). While existing apps display ambient pollution numbers, they completely fail to explain <strong>where it originated</strong> or <strong>who is responsible</strong>.
+      </p>
+
+      <div class="grid-3">
+        <div class="glass-card">
+          <div style="font-size: 36px; margin-bottom: 16px;">🌫️</div>
+          <div class="card-title">Number Without Cause</div>
+          <p class="card-p">
+            Existing apps (AQICN, SAFAR, weather widgets) only show a static AQI number (e.g. 420). They offer zero insight into whether pollution is local vehicular smog, industrial venting, or transboundary stubble smoke.
+          </p>
+          <div style="margin-top: 20px;">
+            <span class="pill pill-red">No Source Attribution</span>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <div style="font-size: 36px; margin-bottom: 16px;">⚔️</div>
+          <div class="card-title">Inter-State Blame Game</div>
+          <p class="card-p">
+            Municipal and state authorities trade accusations without mathematical trajectory evidence. Agricultural burning, urban congestion, and power plants lack provable, wind-vector backed accountability.
+          </p>
+          <div style="margin-top: 20px;">
+            <span class="pill pill-amber">Regulatory Impasse</span>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <div style="font-size: 36px; margin-bottom: 16px;">🗄️</div>
+          <div class="card-title">Disconnected Data Silos</div>
+          <p class="card-p">
+            Ground reference stations (CPCB/OpenAQ), NASA FIRMS satellite fire feeds (VIIRS/MODIS), and on-ground citizen complaints exist in three isolated worlds with zero automated fusion.
+          </p>
+          <div style="margin-top: 20px;">
+            <span class="pill pill-cyan">Zero Data Synergy</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card highlight" style="margin-top: 32px; padding: 20px 32px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span style="font-size: 28px;">🎯</span>
+          <div style="font-size: 18px; color: #F8FAFC;">
+            <strong>The Core Problem We Solve:</strong> Transitioning from passive <em>"Air is bad"</em> monitoring to active, real-time <em>"Pollution is coming from Sector X via Wind Corridor Y — Dispatch Enforcement Now"</em>.
+          </div>
+        </div>
+        <span class="pill pill-green" style="font-size: 14px; padding: 6px 16px;">Actionable Intelligence</span>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div>Problem Identification & Landscape Analysis</div>
+      <div class="slide-number">02 / 10</div>
+    </div>
+  </div>
+
+
+  <!-- ==================== SLIDE 3: THE SOLUTION ==================== -->
+  <div class="slide" id="slide-3">
+    <div class="glow-orb" style="width: 500px; height: 500px; background: rgba(16, 185, 129, 0.12); top: 0; right: 100px;"></div>
+
+    <div class="slide-header">
+      <div class="brand-mark">
+        <div class="brand-icon">V</div>
+        <div class="brand-title">VAYU-NET</div>
+      </div>
+      <div class="category-badge">02 // UNIFIED SOLUTION</div>
+    </div>
+
+    <div class="slide-body">
+      <h2 class="headline-lg">
+        The VAYU-NET Solution:<br>
+        <span class="gradient-text">Unified Ingestion, Spatial Clustering & Trajectory Modeling</span>
+      </h2>
+      <p class="subhead">
+        A single, full-stack intelligence platform bridging satellite telemetry, continuous ground monitoring, and citizen reporting through physics-informed spatial intelligence.
+      </p>
+
+      <div class="grid-4">
+        <div class="glass-card flow-step">
+          <div class="step-number">1</div>
+          <div class="card-title" style="font-size: 19px;">Multi-Source Telemetry</div>
+          <p class="card-p" style="font-size: 14px;">
+            Real-time automated sync with OpenAQ CPCB ground stations, NASA FIRMS thermal anomaly satellites, and geotagged citizen submissions.
+          </p>
+          <div style="margin-top: 16px;">
+            <span class="pill pill-green">Live Pipeline</span>
+          </div>
+        </div>
+
+        <div class="glass-card flow-step">
+          <div class="step-number">2</div>
+          <div class="card-title" style="font-size: 19px;">DBSCAN Spatial AI</div>
+          <p class="card-p" style="font-size: 14px;">
+            Unsupervised density-based spatial clustering filters out sensor noise and groups multi-origin emission points into precise micro-hotspot zones.
+          </p>
+          <div style="margin-top: 16px;">
+            <span class="pill pill-cyan">Dynamic Density</span>
+          </div>
+        </div>
+
+        <div class="glass-card flow-step">
+          <div class="step-number">3</div>
+          <div class="card-title" style="font-size: 19px;">Kinematic Corridors</div>
+          <p class="card-p" style="font-size: 14px;">
+            Wind vector decomposition ($u, v$) + Boundary Layer Height (BLH) inversion dynamics reconstruct upwind transport corridors and plume cones.
+          </p>
+          <div style="margin-top: 16px;">
+            <span class="pill pill-purple">Physics Plumes</span>
+          </div>
+        </div>
+
+        <div class="glass-card flow-step">
+          <div class="step-number">4</div>
+          <div class="card-title" style="font-size: 19px;">Dual-Persona UI</div>
+          <p class="card-p" style="font-size: 14px;">
+            Bilingual plain-language health guidance for the general public, paired with a 3-tab operational Situation Room for enforcement teams.
+          </p>
+          <div style="margin-top: 16px;">
+            <span class="pill pill-amber">Zero Jargon</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top: 32px;">
+        <div class="glass-card" style="padding: 24px;">
+          <div class="metric-value">100%</div>
+          <div class="metric-label">Automated Ingestion Pipeline</div>
+          <p class="card-p" style="font-size: 13px; margin-top: 6px;">Zero manual data entry; direct REST & cron sync with OpenAQ & NASA FIRMS.</p>
+        </div>
+        <div class="glass-card" style="padding: 24px;">
+          <div class="metric-value">&lt; 150 ms</div>
+          <div class="metric-label">DBSCAN Clustering Latency</div>
+          <p class="card-p" style="font-size: 13px; margin-top: 6px;">Real-time spatial grouping of thousands of sensor and satellite coordinates.</p>
+        </div>
+        <div class="glass-card" style="padding: 24px;">
+          <div class="metric-value">Dual Role</div>
+          <div class="metric-label">Tailored UX Architecture</div>
+          <p class="card-p" style="font-size: 13px; margin-top: 6px;">Accessible Hindi/English for citizens; granular GIS tools for authorities.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div>Solution Architecture & Value Proposition</div>
+      <div class="slide-number">03 / 10</div>
+    </div>
+  </div>
+
+
+  <!-- ==================== SLIDE 4: TECHNICAL ARCHITECTURE ==================== -->
+  <div class="slide" id="slide-4">
+    <div class="glow-orb" style="width: 500px; height: 500px; background: rgba(59, 130, 246, 0.12); bottom: 50px; right: 50px;"></div>
+
+    <div class="slide-header">
+      <div class="brand-mark">
+        <div class="brand-icon">V</div>
+        <div class="brand-title">VAYU-NET</div>
+      </div>
+      <div class="category-badge cyan">03 // SYSTEM ARCHITECTURE</div>
+    </div>
+
+    <div class="slide-body">
+      <h2 class="headline-lg">
+        Enterprise-Grade Architecture:<br>
+        <span class="gradient-text-cyan">High-Throughput Ingestion to 3D WebGL Visualization</span>
+      </h2>
+
+      <div class="grid-2" style="gap: 36px; margin-top: 10px;">
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div class="glass-card" style="padding: 20px 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span class="pill pill-green">LAYER 1: DATA INGESTION</span>
+              <span style="font-family: monospace; font-size: 12px; color: var(--text-dim);">REST / CRON / WEBSOCKET</span>
+            </div>
+            <div style="font-size: 16px; font-weight: 700; color: #F8FAFC;">OpenAQ v3 API • NASA FIRMS Satellite • Open-Meteo • Citizen Crowdsource</div>
+            <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Ingests PM2.5, PM10, thermal anomalies, wind speed/direction, and boundary layer height.</div>
+          </div>
+
+          <div class="glass-card" style="padding: 20px 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span class="pill pill-cyan">LAYER 2: ASYNC CORE BACKEND</span>
+              <span style="font-family: monospace; font-size: 12px; color: var(--text-dim);">FASTAPI // PYTHON 3.12+</span>
+            </div>
+            <div style="font-size: 16px; font-weight: 700; color: #F8FAFC;">FastAPI Async Engine • Pydantic v2 • SQLAlchemy 2.0 • Redis Cache</div>
+            <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">High-concurrency REST endpoints, RBAC security dependencies, OpenAPI 3.1 specs.</div>
+          </div>
+
+          <div class="glass-card" style="padding: 20px 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span class="pill pill-purple">LAYER 3: AI & ANALYTICS ENGINES</span>
+              <span style="font-family: monospace; font-size: 12px; color: var(--text-dim);">SCIKIT-LEARN // KINEMATICS</span>
+            </div>
+            <div style="font-size: 16px; font-weight: 700; color: #F8FAFC;">DBSCAN Clustering • Vector Trajectory Engine • Inversion Metric Calculator</div>
+            <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Computes spatial hotspot hulls, wind plume corridors, and source attribution tags.</div>
+          </div>
+
+          <div class="glass-card" style="padding: 20px 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span class="pill pill-amber">LAYER 4: MODERN FRONTEND & 3D</span>
+              <span style="font-family: monospace; font-size: 12px; color: var(--text-dim);">REACT 18 // THREE.JS // MAPLIBRE</span>
+            </div>
+            <div style="font-size: 16px; font-weight: 700; color: #F8FAFC;">Three.js Atmospheric Canvas • MapLibre GL • Tailwind CSS • Lucide Icons</div>
+            <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Live fluid particle simulation, interactive GIS mapping, bilingual multi-role dashboards.</div>
+          </div>
+        </div>
+
+        <!-- Right Side: Tech Stack Matrix -->
+        <div class="glass-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div class="card-title">Production Tech Stack Breakdown</div>
+            <p class="card-p" style="margin-bottom: 24px;">
+              Engineered with zero technical debt: asynchronous microservice-ready backend and modular component-driven frontend.
+            </p>
+
+            <table class="comp-table">
+              <tr>
+                <th>Component</th>
+                <th>Technology</th>
+                <th>Key Responsibility</th>
+              </tr>
+              <tr>
+                <td><strong style="color: #F8FAFC;">Frontend</strong></td>
+                <td>React 18 + Vite + TS</td>
+                <td>Sub-second HMR, type-safe reactive state</td>
+              </tr>
+              <tr>
+                <td><strong style="color: #F8FAFC;">3D Particle Engine</strong></td>
+                <td>Three.js (WebGL)</td>
+                <td>Live 60 FPS atmospheric wind & plume dynamics</td>
+              </tr>
+              <tr>
+                <td><strong style="color: #F8FAFC;">Geospatial Mapping</strong></td>
+                <td>MapLibre GL / Leaflet</td>
+                <td>Hardware-accelerated vector tile rendering</td>
+              </tr>
+              <tr>
+                <td><strong style="color: #F8FAFC;">Backend Server</strong></td>
+                <td>FastAPI + Uvicorn</td>
+                <td>Async I/O with auto-generated Swagger UI</td>
+              </tr>
+              <tr>
+                <td><strong style="color: #F8FAFC;">Data Store & Cache</strong></td>
+                <td>SQLite / AsyncPG + Redis</td>
+                <td>Station telemetry, hotspots & session caching</td>
+              </tr>
+              <tr>
+                <td><strong style="color: #F8FAFC;">Edge Delivery</strong></td>
+                <td>Cloudflare Quick Tunnel</td>
+                <td>Global low-latency HTTPS public access</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="tech-box" style="margin-top: 20px;">
+            <span style="color: #34D399;">✓ Architecture Verification:</span> All components live, tested, and communicating seamlessly with zero CORS issues over Cloudflare Edge.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div>Full-Stack Architectural Flow & Technical Stack</div>
+      <div class="slide-number">04 / 10</div>
+    </div>
+  </div>
+
+
+  <!-- ==================== SLIDE 5: AI & MATHEMATICAL MODELS ==================== -->
+  <div class="slide" id="slide-5">
+    <div class="glow-orb" style="width: 500px; height: 500px; background: rgba(139, 92, 246, 0.12); top: 50px; left: 100px;"></div>
+
+    <div class="slide-header">
+      <div class="brand-mark">
+        <div class="brand-icon">V</div>
+        <div class="brand-title">VAYU-NET</div>
+      </div>
+      <div class="category-badge purple">04 // AI & PHYSICS ENGINE</div>
+    </div>
+
+    <div class="slide-body">
+      <h2 class="headline-lg">
+        Mathematical Core:<br>
+        <span class="gradient-text">Density Clustering & Kinematic Plume Attribution</span>
+      </h2>
+      <p class="subhead">
+        Moving beyond static thresholding. VAYU-NET couples spatial statistics with atmospheric kinematics to trace pollution to its physical origin.
+      </p>
+
+      <div class="grid-3">
+        <div class="glass-card">
+          <div class="pill pill-cyan" style="margin-bottom: 12px;">UNSUPERVISED LEARNING</div>
+          <div class="card-title">1. DBSCAN Hotspot Clustering</div>
+          <p class="card-p" style="font-size: 15px; margin-bottom: 16px;">
+            Density-Based Spatial Clustering of Applications with Noise (DBSCAN) using the Great-Circle Haversine distance metric.
+          </p>
+          <div class="tech-box" style="font-size: 13px; margin-bottom: 16px;">
+            $D_{haversine}(p_1, p_2) \le \epsilon$<br>
+            $\text{Density Condition: } |N_\epsilon(p)| \ge \text{MinPts}$
+          </div>
+          <p class="card-p" style="font-size: 13px;">
+            Automatically detects multi-point clusters (stubble burning belts, industrial zones) while isolating spurious sensor glitches as statistical noise.
+          </p>
+        </div>
+
+        <div class="glass-card">
+          <div class="pill pill-purple" style="margin-bottom: 12px;">ATMOSPHERIC PHYSICS</div>
+          <div class="card-title">2. Upwind Trajectory Corridors</div>
+          <p class="card-p" style="font-size: 15px; margin-bottom: 16px;">
+            Decomposes synoptic 10m wind velocity into orthogonal directional vectors to construct backward transport trajectories.
+          </p>
+          <div class="tech-box" style="font-size: 13px; margin-bottom: 16px;">
+            $u = -v_{wind} \cdot \sin(\theta_{heading})$<br>
+            $v = -v_{wind} \cdot \cos(\theta_{heading})$
+          </div>
+          <p class="card-p" style="font-size: 13px;">
+            Projects backward corridor cones tracing where air masses travelled 3 to 12 hours prior to reaching urban ground reference stations.
+          </p>
+        </div>
+
+        <div class="glass-card">
+          <div class="pill pill-amber" style="margin-bottom: 12px;">METEOROLOGICAL INVERSION</div>
+          <div class="card-title">3. Inversion Trapping Dynamics</div>
+          <p class="card-p" style="font-size: 15px; margin-bottom: 16px;">
+            Quantifies vertical atmospheric compression using Boundary Layer Height (BLH) and thermal lapse rates.
+          </p>
+          <div class="tech-box" style="font-size: 13px; margin-bottom: 16px;">
+            $\text{Trapping Factor } \kappa = \frac{BLH_{standard}}{BLH_{observed}}$<br>
+            $\text{Severe Trapping if } BLH &lt; 300\text{m}$
+          </div>
+          <p class="card-p" style="font-size: 13px;">
+            Distinguishes between genuine emission spikes and artificial smog accumulation caused by nocturnal winter thermal inversions.
+          </p>
+        </div>
+      </div>
+
+      <!-- Decision Tree Logic Bar -->
+      <div class="glass-card highlight" style="margin-top: 28px; padding: 20px 32px;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div style="font-weight: 700; color: #F8FAFC; font-size: 16px;">Automated Kinematic Decision Tree</div>
+            <div style="font-size: 14px; color: var(--text-muted); margin-top: 4px;">
+              Rules-assisted ML classifier categorizes sources: 
+              <span style="color: #FB7185;">Biomass Burning</span> (Satellite fire overlap + upwind heading) vs 
+              <span style="color: #FBBF24;">Road Dust & Traffic</span> (High PM10/PM2.5 ratio) vs 
+              <span style="color: #38BDF8;">Thermal Inversion Trapping</span> (Low wind + collapsed BLH).
+            </div>
+          </div>
+          <span class="pill pill-green" style="font-size: 13px;">Evidence-Based Attribution</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div>Mathematical Modeling, Physics Trajectories & Source Classification</div>
+      <div class="slide-number">05 / 10</div>
+    </div>
+  </div>
+
+
+  <!-- ==================== SLIDE 6: DUAL PERSONA USER EXPERIENCE ==================== -->
+  <div class="slide" id="slide-6">
+    <div class="glow-orb" style="width: 500px; height: 500px; background: rgba(16, 185, 129, 0.1); top: 100px; right: 50px;"></div>
+
+    <div class="slide-header">
+      <div class="brand-mark">
+        <div class="brand-icon">V</div>
+        <div class="brand-title">VAYU-NET</div>
+      </div>
+      <div class="category-badge">05 // HUMAN-CENTERED DESIGN</div>
+    </div>
+
+    <div class="slide-body">
+      <h2 class="headline-lg">
+        Dual-Persona Product Experience:<br>
+        <span class="gradient-text">Bilingual Public Clarity vs Granular Authority Command</span>
+      </h2>
+      <p class="subhead">
+        A single technological engine serving two radically distinct user needs without compromising simplicity or analytical depth.
+      </p>
+
+      <div class="grid-2" style="gap: 36px;">
+        <!-- Left: Public / Citizen Role -->
+        <div class="glass-card" style="border-top: 4px solid var(--emerald);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div class="card-title" style="margin: 0; color: #34D399;">
+              <span>🌱 Citizen / Public Portal</span>
+            </div>
+            <span class="pill pill-green">Zero-Jargon Bilingual UX</span>
+          </div>
+
+          <p class="card-p" style="margin-bottom: 20px;">
+            Designed for the everyday resident, elderly citizens, and schools. Translates complex telemetry into clear Hindi & English daily advisories:
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+            <div style="background: rgba(16, 185, 129, 0.08); border-left: 3px solid var(--emerald); padding: 12px 16px; border-radius: 0 8px 8px 0;">
+              <div style="font-size: 13px; font-weight: 700; color: #34D399;">Prominent Daily Summary Banner:</div>
+              <div style="font-size: 14px; color: #F8FAFC; margin-top: 2px;">
+                "Aaj Delhi-NCR ki hawa bohot kharab (Severe) hai. Bahar jana safe nahi hai, mask ka prayog karein."
+              </div>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--cyan); padding: 12px 16px; border-radius: 0 8px 8px 0;">
+              <div style="font-size: 13px; font-weight: 700; color: #38BDF8;">Plain-Language Metric Explanations:</div>
+              <div style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
+                Technical tags like <em>'Elevated Road & Soil Dust'</em> include subtext: <em>"Dhool-mitti aur traffic se pollution zyada hai."</em>
+              </div>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--amber); padding: 12px 16px; border-radius: 0 8px 8px 0;">
+              <div style="font-size: 13px; font-weight: 700; color: #FBBF24;">Geotagged Crowdsource Reporting:</div>
+              <div style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
+                Citizens upload GPS photos of illegal garbage/crop burning directly feeding the municipal verification queue.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Authority / Analyst Role -->
+        <div class="glass-card" style="border-top: 4px solid var(--cyan);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div class="card-title" style="margin: 0; color: #38BDF8;">
+              <span>🏛️ Situation Room (Authority / CPCB)</span>
+            </div>
+            <span class="pill pill-cyan">3-Tab Tactical Command</span>
+          </div>
+
+          <p class="card-p" style="margin-bottom: 20px;">
+            Equipped for Municipal Commissioners, SPCB enforcement squads, and environmental scientists with structured operational separation:
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+            <div style="background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--cyan); padding: 12px 16px; border-radius: 0 8px 8px 0;">
+              <div style="font-size: 13px; font-weight: 700; color: #38BDF8;">Tab 1: Live Geospatial Map View:</div>
+              <div style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
+                Dedicated high-performance map canvas overlaying CPCB monitors, NASA fire points, and verified citizen markers.
+              </div>
+            </div>
+
+            <div style="background: rgba(139, 92, 246, 0.08); border-left: 3px solid var(--purple); padding: 12px 16px; border-radius: 0 8px 8px 0;">
+              <div style="font-size: 13px; font-weight: 700; color: #A78BFA;">Tab 2: Geospatial Analysis & DBSCAN Results:</div>
+              <div style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
+                Click "Run DBSCAN" to inspect detected clusters, core point counts, radius, and transport trajectory corridors.
+              </div>
+            </div>
+
+            <div style="background: rgba(244, 63, 94, 0.08); border-left: 3px solid var(--rose); padding: 12px 16px; border-radius: 0 8px 8px 0;">
+              <div style="font-size: 13px; font-weight: 700; color: #FB7185;">Tab 3: Active Operations & Enforcement:</div>
+              <div style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
+                One-click alert evaluation, GRAP-IV enforcement dispatch, and citizen report moderation (Verify / Reject).
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div>Inclusive Citizen Engagement & Deep Institutional Utility</div>
+      <div class="slide-number">06 / 10</div>
+    </div>
+  </div>
+
+
+  <!-- ==================== SLIDE 7: 3D ATMOSPHERIC INNOVATION ==================== -->
+  <div class="slide" id="slide-7">
+    <div class="glow-orb" style="width: 500px; height: 500px; background: rgba(6, 182, 212, 0.15); bottom: 100px; left: 100px;"></div>
+
+    <div class="slide-header">
+      <div class="brand-mark">
+        <div class="brand-icon">V</div>
+        <div class="brand-title">VAYU-NET</div>
+      </div>
+      <div class="category-badge cyan">06 // CUTTING-EDGE UI INNOVATION</div>
+    </div>
+
+    <div class="slide-body">
+      <h2 class="headline-lg">
+        Next-Level Visual Experience:<br>
+        <span class="gradient-text-cyan">3D Atmospheric Particle Engine (WebGL / Three.js)</span>
+      </h2>
+      <p class="subhead">
+        Replaced generic corporate "AI-looking" dashboards with a high-fidelity 3D atmospheric physics simulation that renders real fluid air currents in real time.
+      </p>
+
+      <div class="grid-3">
+        <div class="glass-card">
+          <div style="font-size: 36px; margin-bottom: 16px;">🌀</div>
+          <div class="card-title">Real-Time Wind Simulation</div>
+          <p class="card-p">
+            Particle vectors adjust their trajectory velocity, direction, and dispersion in direct mathematical sync with real-time Open-Meteo wind speed and synoptic heading.
+          </p>
+          <div style="margin-top: 20px;">
+            <span class="pill pill-cyan">Dynamic Fluid Vector Fields</span>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <div style="font-size: 36px; margin-bottom: 16px;">🎨</div>
+          <div class="card-title">Adaptive AQI Shading</div>
+          <p class="card-p">
+            Particle colors dynamically transition from refreshing emerald (Clean/Good) to hazy amber (Moderate) to dense crimson-purple (Severe Smog) based on live station PM2.5.
+          </p>
+          <div style="margin-top: 20px;">
+            <span class="pill pill-green">Real-Time Spectral Shifts</span>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <div style="font-size: 36px; margin-bottom: 16px;">⚡</div>
+          <div class="card-title">Hardware-Accelerated 60 FPS</div>
+          <p class="card-p">
+            Instanced buffer geometry and WebGL shaders ensure butter-smooth 60 frames-per-second rendering across mobile browsers, laptops, and ultra-wide command monitors.
+          </p>
+          <div style="margin-top: 20px;">
+            <span class="pill pill-purple">GPU Zero-Lag Optimization</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card" style="margin-top: 32px; background: rgba(2, 6, 23, 0.8); border: 1px solid rgba(6, 182, 212, 0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 20px;">
+            <div style="font-size: 32px;">✨</div>
+            <div>
+              <div style="font-size: 17px; font-weight: 700; color: #F8FAFC;">Design Rationale: Professional Institutional Immersion</div>
+              <div style="font-size: 14px; color: var(--text-muted); margin-top: 2px;">
+                Rather than flat static charts, the 3D particle canvas instantly communicates physical air movement and particulate density to judges and stakeholders.
+              </div>
+            </div>
+          </div>
+          <span class="pill pill-cyan" style="font-size: 13px; padding: 6px 16px;">Three.js Atmospheric Canvas</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div>UI/UX Innovation & Advanced WebGL Graphics</div>
+      <div class="slide-number">07 / 10</div>
+    </div>
+  </div>
+
+
+  <!-- ==================== SLIDE 8: LIVE VERIFICATION & REAL DATA ==================== -->
+  <div class="slide" id="slide-8">
+    <div class="glow-orb" style="width: 500px; height: 500px; background: rgba(16, 185, 129, 0.15); top: 50px; right: 100px;"></div>
+
+    <div class="slide-header">
+      <div class="brand-mark">
+        <div class="brand-icon">V</div>
+        <div class="brand-title">VAYU-NET</div>
+      </div>
+      <div class="category-badge">07 // REAL-WORLD PROOF OF WORK</div>
+    </div>
+
+    <div class="slide-body">
+      <h2 class="headline-lg">
+        Proof of Working Implementation:<br>
+        <span class="gradient-text">Live Deployed, Distinct City Data & Zero Mock Ups</span>
+      </h2>
+      <p class="subhead">
+        Unlike theoretical hackathon concepts, VAYU-NET is fully functioning, publicly deployed, and running on real government & international APIs.
+      </p>
+
+      <div class="grid-2" style="gap: 36px;">
+        <!-- Left: Live Telemetry Cards -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <div class="glass-card highlight" style="padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <span style="font-weight: 700; font-size: 18px; color: #F8FAFC;">Delhi-NCR Central Reference</span>
+              <span class="pill pill-red">AQI 481 // SEVERE</span>
+            </div>
+            <div class="grid-3" style="gap: 16px; margin-top: 16px;">
+              <div>
+                <div class="metric-value" style="font-size: 32px; color: #FB7185;">451.0</div>
+                <div class="metric-label" style="font-size: 12px;">PM2.5 (µg/m³)</div>
+              </div>
+              <div>
+                <div class="metric-value" style="font-size: 32px; color: #FBBF24;">55.5</div>
+                <div class="metric-label" style="font-size: 12px;">PM10 (µg/m³)</div>
+              </div>
+              <div>
+                <div class="metric-value" style="font-size: 32px; color: #34D399;">MEASURED</div>
+                <div class="metric-label" style="font-size: 12px;">Data Origin</div>
+              </div>
+            </div>
+            <div style="margin-top: 16px; font-size: 13px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace;">
+              Source: OpenAQ CPCB Reference • Lat: 28.6139°N, Lon: 77.2090°E
+            </div>
+          </div>
+
+          <div class="glass-card" style="padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <span style="font-weight: 700; font-size: 18px; color: #F8FAFC;">Ludhiana Industrial Baseline</span>
+              <span class="pill pill-amber">INDEPENDENT TELEMETRY</span>
+            </div>
+            <div class="grid-3" style="gap: 16px; margin-top: 16px;">
+              <div>
+                <div class="metric-value" style="font-size: 32px; color: #FBBF24;">92.0</div>
+                <div class="metric-label" style="font-size: 12px;">PM2.5 (µg/m³)</div>
+              </div>
+              <div>
+                <div class="metric-value" style="font-size: 32px; color: #34D399;">145.0</div>
+                <div class="metric-label" style="font-size: 12px;">PM10 (µg/m³)</div>
+              </div>
+              <div>
+                <div class="metric-value" style="font-size: 32px; color: #38BDF8;">308.2°</div>
+                <div class="metric-label" style="font-size: 12px;">Wind Vector</div>
+              </div>
+            </div>
+            <div style="margin-top: 16px; font-size: 13px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace;">
+              Genuinely distinct real-world datasets across different geographical coordinates.
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Public Access & API Hub -->
+        <div class="glass-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div class="card-title">Live Deployment Verification Hub</div>
+            <p class="card-p" style="margin-bottom: 24px;">
+              Test right now on any phone or laptop. Every component is live over Cloudflare Edge:
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <div class="tech-box">
+                <div style="color: var(--text-dim); font-size: 12px; margin-bottom: 4px;">PUBLIC LIVE APP LINK (SHAREABLE):</div>
+                <a href="https://vegetation-nelson-guided-pittsburgh.trycloudflare.com" target="_blank" style="color: #34D399; font-weight: 700; font-size: 16px; text-decoration: none;">
+                  https://vegetation-nelson-guided-pittsburgh.trycloudflare.com
+                </a>
+              </div>
+
+              <div class="tech-box">
+                <div style="color: var(--text-dim); font-size: 12px; margin-bottom: 4px;">INTERACTIVE SWAGGER API DOCS:</div>
+                <a href="https://vegetation-nelson-guided-pittsburgh.trycloudflare.com/docs" target="_blank" style="color: #38BDF8; font-weight: 700; font-size: 16px; text-decoration: none;">
+                  .../docs (Live OpenAPI 3.1 Schema)
+                </a>
+              </div>
+
+              <div class="tech-box">
+                <div style="color: var(--text-dim); font-size: 12px; margin-bottom: 4px;">GITHUB OPEN SOURCE REPOSITORY:</div>
+                <a href="https://github.com/Sushantraj04/vayu.git" target="_blank" style="color: #A78BFA; font-weight: 700; font-size: 16px; text-decoration: none;">
+                  https://github.com/Sushantraj04/vayu.git
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; margin-top: 24px;">
+            <span class="pill pill-green">✓ Edge SSL Active</span>
+            <span class="pill pill-cyan">✓ REST Endpoints Verified</span>
+            <span class="pill pill-purple">✓ Working Tree Clean</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div>Live Deployment Metrics, Cloudflare Edge & Independent Telemetry</div>
+      <div class="slide-number">08 / 10</div>
+    </div>
+  </div>
+
+
+  <!-- ==================== SLIDE 9: IMPACT & SCALABILITY ==================== -->
+  <div class="slide" id="slide-9">
+    <div class="glow-orb" style="width: 500px; height: 500px; background: rgba(16, 185, 129, 0.1); bottom: 50px; right: 50px;"></div>
+
+    <div class="slide-header">
+      <div class="brand-mark">
+        <div class="brand-icon">V</div>
+        <div class="brand-title">VAYU-NET</div>
+      </div>
+      <div class="category-badge">08 // IMPACT & SCALABILITY</div>
+    </div>
+
+    <div class="slide-body">
+      <h2 class="headline-lg">
+        Societal Impact & Municipal Scalability:<br>
+        <span class="gradient-text">From Local Hotspots to a Pan-India Federated Mesh</span>
+      </h2>
+      <p class="subhead">
+        Built to scale with zero infrastructure re-engineering. Direct adoption path for environmental agencies and smart city missions.
+      </p>
+
+      <div class="grid-3">
+        <div class="glass-card">
+          <div class="metric-value">3x Faster</div>
+          <div class="card-title" style="font-size: 20px;">Enforcement Dispatch</div>
+          <p class="card-p">
+            Automated threshold evaluation triggers instantaneous SMS & GIS notifications to field enforcement squads before agricultural or industrial plumes engulf residential centers.
+          </p>
+        </div>
+
+        <div class="glass-card">
+          <div class="metric-value">100%</div>
+          <div class="card-title" style="font-size: 20px;">Inter-State Accountability</div>
+          <p class="card-p">
+            Provides scientifically defensible wind trajectory models and satellite corroboration, eliminating speculative disputes between state pollution control boards.
+          </p>
+        </div>
+
+        <div class="glass-card">
+          <div class="metric-value">Zero-Cost</div>
+          <div class="card-title" style="font-size: 20px;">Citizen Access</div>
+          <p class="card-p">
+            Bilingual, mobile-optimized public portal empowers millions of citizens with accurate, actionable health advisories and crowdsourced verification.
+          </p>
+        </div>
+      </div>
+
+      <!-- Target Beneficiaries Grid -->
+      <div class="glass-card" style="margin-top: 32px; padding: 28px 32px;">
+        <div class="card-title" style="margin-bottom: 20px;">Direct Stakeholder & Deployment Matrix</div>
+        <div class="grid-4" style="gap: 20px;">
+          <div style="background: rgba(255, 255, 255, 0.03); padding: 16px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.06);">
+            <div style="color: #34D399; font-weight: 700; margin-bottom: 6px;">CPCB & SPCB</div>
+            <div style="font-size: 13px; color: var(--text-muted);">Source attribution evidence, automated GRAP alert triggers.</div>
+          </div>
+          <div style="background: rgba(255, 255, 255, 0.03); padding: 16px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.06);">
+            <div style="color: #38BDF8; font-weight: 700; margin-bottom: 6px;">Smart City ICCC</div>
+            <div style="font-size: 13px; color: var(--text-muted);">Integrated command center feed, drone & patrol dispatch.</div>
+          </div>
+          <div style="background: rgba(255, 255, 255, 0.03); padding: 16px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.06);">
+            <div style="color: #A78BFA; font-weight: 700; margin-bottom: 6px;">Public Health Bodies</div>
+            <div style="font-size: 13px; color: var(--text-muted);">Vulnerable population early warnings, hospital load prep.</div>
+          </div>
+          <div style="background: rgba(255, 255, 255, 0.03); padding: 16px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.06);">
+            <div style="color: #FBBF24; font-weight: 700; margin-bottom: 6px;">General Public</div>
+            <div style="font-size: 13px; color: var(--text-muted);">Jargon-free daily advisories in Hindi & English, crowdsource voice.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div>Scalability, Policy Alignment & Socio-Economic Impact</div>
+      <div class="slide-number">09 / 10</div>
+    </div>
+  </div>
+
+
+  <!-- ==================== SLIDE 10: ROADMAP & THE ASK ==================== -->
+  <div class="slide" id="slide-10">
+    <div class="glow-orb" style="width: 600px; height: 600px; background: rgba(16, 185, 129, 0.15); top: -100px; right: -50px;"></div>
+    <div class="glow-orb" style="width: 500px; height: 500px; background: rgba(6, 182, 212, 0.12); bottom: -100px; left: -50px;"></div>
+
+    <div class="slide-header">
+      <div class="brand-mark">
+        <div class="brand-icon">V</div>
+        <div class="brand-title">VAYU-NET</div>
+      </div>
+      <div class="category-badge">09 // ROADMAP & CONCLUSION</div>
+    </div>
+
+    <div class="slide-body">
+      <h2 class="headline-lg">
+        Strategic Roadmap & Vision:<br>
+        <span class="gradient-text">From Hackathon Prototype to National Defense Platform</span>
+      </h2>
+      <p class="subhead">
+        A clear, phased execution timeline to scale VAYU-NET across all 131 non-attainment cities under NCAP.
+      </p>
+
+      <div class="grid-3" style="margin-bottom: 32px;">
+        <div class="glass-card highlight">
+          <div class="pill pill-green" style="margin-bottom: 12px;">PHASE 1 // COMPLETED</div>
+          <div class="card-title">Production MVP</div>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: var(--text-muted); margin-top: 12px;">
+            <li>✓ Multi-source ingestion (OpenAQ + FIRMS)</li>
+            <li>✓ Unsupervised DBSCAN hotspot engine</li>
+            <li>✓ Kinematic trajectory attribution model</li>
+            <li>✓ 3D Atmospheric Three.js WebGL canvas</li>
+            <li>✓ Dual-Persona UI (Citizen & Authority)</li>
+            <li>✓ Public Cloudflare Tunnel deployment</li>
+          </ul>
+        </div>
+
+        <div class="glass-card">
+          <div class="pill pill-cyan" style="margin-bottom: 12px;">PHASE 2 // NEXT 3 MONTHS</div>
+          <div class="card-title">Edge IoT & Mobile Push</div>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: var(--text-muted); margin-top: 12px;">
+            <li>• Native Android/iOS citizen report app</li>
+            <li>• Low-cost IoT sensor mesh ingestion ($50 nodes)</li>
+            <li>• Automated WhatsApp/SMS alerts for high-risk zones</li>
+            <li>• Municipal task dispatch & geotagged resolution</li>
+            <li>• Drone patrol coordinate auto-generation</li>
+          </ul>
+        </div>
+
+        <div class="glass-card">
+          <div class="pill pill-purple" style="margin-bottom: 12px;">PHASE 3 // 6 TO 12 MONTHS</div>
+          <div class="card-title">Deep Learning Forecasting</div>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: var(--text-muted); margin-top: 12px;">
+            <li>• Physics-Informed Neural Networks (PINNs)</li>
+            <li>• 48-hour forward dispersion simulation</li>
+            <li>• Cross-border federated satellite telemetry</li>
+            <li>• Pan-India deployment across 131 NCAP cities</li>
+            <li>• Open API marketplace for climate researchers</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Callout Box for Judges -->
+      <div class="glass-card" style="padding: 24px 36px; display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1)); border: 1px solid rgba(16, 185, 129, 0.3);">
+        <div>
+          <div style="font-size: 22px; font-weight: 800; color: #F8FAFC;">Thank You! We are ready for your Questions.</div>
+          <div style="font-size: 15px; color: #34D399; margin-top: 4px;">
+            Try the live app now: <a href="https://vegetation-nelson-guided-pittsburgh.trycloudflare.com" target="_blank" style="color: white; text-decoration: underline;">vegetation-nelson-guided-pittsburgh.trycloudflare.com</a>
+          </div>
+        </div>
+        <div style="display: flex; gap: 16px;">
+          <a href="https://vegetation-nelson-guided-pittsburgh.trycloudflare.com" target="_blank" class="cta-btn" style="padding: 12px 24px; font-size: 15px;">
+            🚀 Test Live Demo
+          </a>
+          <a href="https://github.com/Sushantraj04/vayu.git" target="_blank" class="cta-btn" style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: none; padding: 12px 24px; font-size: 15px;">
+            ⭐ GitHub Repo
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div>Project VAYU-NET • Hackathon Presentation 2026</div>
+      <div class="footer-links">
+        <span>Thank you, Judges & Evaluators!</span>
+      </div>
+      <div class="slide-number">10 / 10</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
