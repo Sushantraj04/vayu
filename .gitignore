@@ -53,3 +53,11 @@ htmlcov/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Scratch and test files
+test_*.py
+check_api.py
+match_openaq.py
+verify_all.py
+uploads/
+

@@ -10,18 +10,22 @@ interface AppShellProps {
 
 export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
-      <TopBar />
-      <div className="flex-1 flex overflow-hidden">
-        <NavRail />
-        <main className="flex-1 flex flex-col overflow-y-auto">
-          <Breadcrumbs />
-          <div className="flex-1 p-4 md:p-6 overflow-y-auto">
-            {children}
-          </div>
-        </main>
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased selection:bg-teal-500/20 selection:text-teal-400 relative">
+      {/* Subtle Tactical Engineering Grid Texture */}
+      <div className="fixed inset-0 bg-tactical-grid opacity-60 pointer-events-none z-0" />
+      <div className="relative z-10 flex flex-col min-h-screen">
+        <TopBar />
+        <div className="flex-1 flex overflow-hidden">
+          <NavRail />
+          <main className="flex-1 flex flex-col overflow-y-auto overflow-x-hidden min-w-0 scroll-smooth">
+            <Breadcrumbs />
+            <div className="flex-1 p-4 sm:p-6 lg:p-8">
+              {children}
+            </div>
+          </main>
+        </div>
+        <CommandPalette />
       </div>
-      <CommandPalette />
     </div>
   );
 };

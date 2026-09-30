@@ -48,8 +48,13 @@ interface AppState {
   toggleLayer: (layer: keyof LayerState) => void;
 }
 
+const initialRole = (localStorage.getItem('vayunet_role') as UserRole) || 'admin';
+if (!localStorage.getItem('vayunet_role')) {
+  localStorage.setItem('vayunet_role', initialRole);
+}
+
 export const useAppStore = create<AppState>((set) => ({
-  currentRole: 'authority', // Default to Situation Room authority for ops, can switch anytime
+  currentRole: initialRole,
   currentView: 'situation',
   currentCorridorId: 'indo-gangetic-main',
   theme: 'dark',
@@ -69,10 +74,23 @@ export const useAppStore = create<AppState>((set) => ({
     gibs_aod: false,
   },
 
-  setRole: (role) => set({ 
-    currentRole: role, 
-    currentView: role === 'public' ? 'public' : role === 'authority' ? 'situation' : 'models' 
-  }),
+  setRole: (role) => {
+    localStorage.setItem('vayunet_role', role);
+    // Asynchronously refresh role token
+    fetch(`/api/v1/auth/role-token?role=${encodeURIComponent(role)}`, { method: 'POST' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.access_token) {
+          localStorage.setItem('vayunet_token', data.access_token);
+        }
+      })
+      .catch((err) => console.warn('Failed to switch role token:', err));
+
+    set({ 
+      currentRole: role, 
+      currentView: role === 'public' ? 'public' : role === 'authority' ? 'situation' : 'models' 
+    });
+  },
   setView: (view) => set({ currentView: view }),
   setCorridorId: (id) => set({ currentCorridorId: id }),
   toggleTheme: () => set((state) => {

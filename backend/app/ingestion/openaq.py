@@ -37,9 +37,21 @@ async def fetch_openaq_stations(bbox: Dict[str, float]) -> List[Dict[str, Any]]:
         return []
 
 
+CITY_OPENAQ_MAP = {
+    "delhi-ncr": 13,
+    "delhi": 13,
+    "ludhiana": 5569,
+    "ambala": 6964,
+    "agra": 860,
+    "kanpur": 5662,
+    "lucknow": 2456,
+}
+
+
 async def sync_station_telemetry(db: AsyncSession) -> int:
     """
     Ingests live PM2.5 and PM10 readings for corridor stations.
+    Pulls real MEASURED CPCB sensor telemetry from OpenAQ v3 when available.
     If OpenAQ is sparse or unavailable, falls back to Open-Meteo Air Quality
     with mandatory DATA_ORIGIN: MODELLED tagging.
     """
@@ -57,37 +69,51 @@ async def sync_station_telemetry(db: AsyncSession) -> int:
             synced = False
 
             # 1. Attempt OpenAQ pull if configured
-            if settings.OPENAQ_API_KEY and stn.external_id.startswith("openaq_"):
+            loc_id = None
+            if stn.external_id and stn.external_id.startswith("openaq_"):
+                loc_id = stn.external_id.replace("openaq_", "")
+            elif stn.city:
+                loc_id = CITY_OPENAQ_MAP.get(stn.city.lower()) or CITY_OPENAQ_MAP.get(stn.city.lower().replace("-ncr", ""))
+
+            if settings.OPENAQ_API_KEY and loc_id:
                 try:
-                    loc_id = stn.external_id.replace("openaq_", "")
                     headers = {"X-API-Key": settings.OPENAQ_API_KEY}
                     resp = await client.get(
-                        f"{OPENAQ_BASE_URL}/locations/{loc_id}/latest",
+                        f"{OPENAQ_BASE_URL}/locations/{loc_id}/sensors",
                         headers=headers
                     )
                     if resp.status_code == 200:
                         results = resp.json().get("results", [])
-                        for item in results:
-                            param = item.get("parameter", "").lower()
-                            val = item.get("value")
-                            is_valid, _ = PhysicalRangeValidator.validate(param, val)
-                            if is_valid and val is not None:
-                                now_utc = datetime.now(timezone.utc)
-                                aqi_val, aqi_cat = calculate_cpcb_naqi(val) if param == "pm25" else (None, None)
-                                
-                                reading = StationReading(
-                                    station_id=stn.id,
-                                    timestamp=now_utc,
-                                    parameter=param,
-                                    value=val,
-                                    unit=item.get("unit", "ug/m3"),
-                                    aqi_value=aqi_val,
-                                    aqi_category=aqi_cat,
-                                    data_origin="MEASURED"
-                                )
-                                db.add(reading)
-                                readings_count += 1
-                                synced = True
+                        for s in results:
+                            param = s.get("parameter", {}).get("name", "").lower()
+                            latest = s.get("latest") or {}
+                            val = latest.get("value")
+                            unit = s.get("parameter", {}).get("units", "ug/m3")
+
+                            if param in ["pm25", "pm10"] and val is not None:
+                                is_valid, _ = PhysicalRangeValidator.validate(param, val)
+                                if is_valid:
+                                    now_utc = datetime.now(timezone.utc)
+                                    aqi_val, aqi_cat = calculate_cpcb_naqi(val) if param == "pm25" else (None, None)
+                                    
+                                    reading = StationReading(
+                                        station_id=stn.id,
+                                        timestamp=now_utc,
+                                        parameter=param,
+                                        value=round(val, 1),
+                                        unit=unit,
+                                        aqi_value=aqi_val,
+                                        aqi_category=aqi_cat,
+                                        data_origin="MEASURED"
+                                    )
+                                    db.add(reading)
+                                    readings_count += 1
+                                    synced = True
+
+                        if synced:
+                            stn.data_source = "OpenAQ CPCB Reference"
+                            stn.last_sync = datetime.now(timezone.utc)
+                            stn.is_stale = False
                 except Exception as e:
                     errors.append(f"OpenAQ {stn.city}: {str(e)}")
 

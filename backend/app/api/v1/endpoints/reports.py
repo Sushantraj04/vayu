@@ -170,7 +170,9 @@ async def moderate_report(
     if payload.status not in ["VERIFIED", "REJECTED"]:
         raise HTTPException(status_code=400, detail="Status must be VERIFIED or REJECTED.")
 
-    stmt = select(CitizenReport).where(CitizenReport.id == report_id)
+    stmt = select(CitizenReport).where(
+        (CitizenReport.id == report_id) | (CitizenReport.public_id == report_id)
+    )
     report = (await db.execute(stmt)).scalar_one_or_none()
     if not report:
         raise HTTPException(status_code=404, detail="Report not found")

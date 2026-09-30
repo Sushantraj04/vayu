@@ -14,6 +14,14 @@ from backend.app.models.report import CitizenReport
 from backend.app.analytics.hotspots import haversine_km
 
 
+def to_utc(dt: Optional[datetime]) -> Optional[datetime]:
+    if dt is None:
+        return None
+    if dt.tzinfo is None:
+        return dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(timezone.utc)
+
+
 class AlertRuleEngine:
     """
     Evaluates automated environmental alert rules:
@@ -141,6 +149,12 @@ class AlertRuleEngine:
                     continue
 
                 cap_id = self.generate_cap_identifier()
+                target_time_str = fc.target_timestamp.strftime('%Y-%m-%d %H:%M UTC') if hasattr(fc.target_timestamp, 'strftime') else str(fc.target_timestamp or 'next 24h')
+                desc_en = (
+                    f"Predictive models forecast a sharp pollution surge reaching {fc.predicted_pm25:.1f} ug/m3 "
+                    f"(CPCB AQI: {fc.predicted_aqi or 'Severe'}) by {target_time_str}. "
+                    "Municipal authorities should enact emergency dust control and industrial curbing immediately."
+                )
                 alert = Alert(
                     id=str(uuid.uuid4()),
                     corridor_id="indo-gangetic-main",
@@ -148,11 +162,7 @@ class AlertRuleEngine:
                     severity=severity,
                     title_en=f"Pollution Spike Forecast Advisory for {fc.city} (+24h)",
                     title_hi=f"{fc.city} के लिए 24 घंटे का गंभीर प्रदूषण पूर्वानुमान",
-                    description_en=(
-                        f"Predictive models forecast a sharp pollution surge reaching {fc.predicted_pm25:.1f} ug/m3 "
-                        f"(CPCB AQI: {fc.predicted_aqi or 'Severe'}) by {fc.target_timestamp.strftime('%Y-%m-%d %H:%M UTC')}. "
-                        "Municipal authorities should enact emergency dust control and industrial curbing immediately."
-                    ),
+                    description_en=desc_en,
                     description_hi=(
                         f"पूर्वानुमान मॉडल 24 घंटों में {fc.city} में {fc.predicted_pm25:.1f} ug/m3 तक प्रदूषण वृद्धि का संकेत दे रहे हैं। "
                         "स्थानीय प्रशासन को धूल नियंत्रण और औद्योगिक उपायों को तुरंत लागू करना चाहिए।"
@@ -243,7 +253,7 @@ class AlertRuleEngine:
 
         recent_reports = [
             r for r in reports 
-            if r.created_at and r.created_at >= since and r.public_lat and r.public_lon
+            if r.created_at and to_utc(r.created_at) >= since and r.public_lat and r.public_lon
         ]
 
         # Spatial grouping within 5 km

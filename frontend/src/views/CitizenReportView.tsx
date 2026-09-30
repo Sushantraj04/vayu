@@ -39,12 +39,17 @@ export const CitizenReportView: React.FC = () => {
     loadReports();
   }, [filterStatus]);
 
+  const [moderatingId, setModeratingId] = useState<string | null>(null);
+
   const handleModerate = async (reportId: string, newStatus: 'VERIFIED' | 'REJECTED') => {
+    setModeratingId(reportId);
     try {
       await api.moderateReport(reportId, { status: newStatus });
-      loadReports();
+      await loadReports();
     } catch (e: any) {
       alert(`Moderation failed: ${e.message}`);
+    } finally {
+      setModeratingId(null);
     }
   };
 
@@ -163,14 +168,16 @@ export const CitizenReportView: React.FC = () => {
                         {r.status === 'PENDING' && (
                           <>
                             <button
-                              onClick={() => handleModerate(r.id, 'VERIFIED')}
-                              className="px-2 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-medium cursor-pointer"
+                              onClick={() => handleModerate(r.id || r.public_id, 'VERIFIED')}
+                              disabled={moderatingId === (r.id || r.public_id)}
+                              className="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-medium cursor-pointer transition-opacity"
                             >
-                              Verify
+                              {moderatingId === (r.id || r.public_id) ? 'Saving...' : 'Verify'}
                             </button>
                             <button
-                              onClick={() => handleModerate(r.id, 'REJECTED')}
-                              className="px-2 py-1 rounded bg-red-600 hover:bg-red-500 text-white font-medium cursor-pointer"
+                              onClick={() => handleModerate(r.id || r.public_id, 'REJECTED')}
+                              disabled={moderatingId === (r.id || r.public_id)}
+                              className="px-2.5 py-1 rounded bg-red-600 hover:bg-red-500 disabled:opacity-50 text-white font-medium cursor-pointer transition-opacity"
                             >
                               Reject
                             </button>

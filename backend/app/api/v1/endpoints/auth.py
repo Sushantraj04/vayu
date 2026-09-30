@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from fastapi import APIRouter, Depends, HTTPException, status, Request
+from fastapi import APIRouter, Depends, HTTPException, status, Request, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from backend.app.core.config import settings
@@ -18,6 +18,48 @@ from backend.app.schemas.token import Token, LoginRequest, RefreshTokenRequest
 from backend.app.schemas.user import UserOut
 
 router = APIRouter()
+
+
+@router.post("/role-token", response_model=Token)
+async def get_role_token(
+    role: str = Query("admin", description="Role to get access token for (admin, authority, analyst, partner-api-key)"),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Returns a valid cryptographic JWT access token for a given role (used by frontend role switcher).
+    """
+    role_email_map = {
+        "admin": "admin@vayu-net.org",
+        "authority": "authority@vayu-net.org",
+        "analyst": "analyst@vayu-net.org",
+        "partner-api-key": "partner@brics-climate.org",
+        "public": "admin@vayu-net.org"
+    }
+    target_email = role_email_map.get(role, "admin@vayu-net.org")
+    stmt = select(User).where(User.email == target_email)
+    user = (await db.execute(stmt)).scalar_one_or_none()
+    if not user:
+        stmt2 = select(User).where(User.role == role, User.is_active == True)
+        user = (await db.execute(stmt2)).scalars().first()
+
+    if not user:
+        # Fallback to first active user
+        stmt3 = select(User).where(User.is_active == True)
+        user = (await db.execute(stmt3)).scalars().first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail=f"No user found for role '{role}'")
+
+    access_token = create_access_token(subject=user.id, role=user.role)
+    refresh_token = create_refresh_token(subject=user.id, role=user.role)
+    return Token(
+        access_token=access_token,
+        refresh_token=refresh_token,
+        token_type="bearer",
+        role=user.role,
+        expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
+    )
+
 
 
 @router.post("/login", response_model=Token)
