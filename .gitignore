@@ -60,4 +60,6 @@ check_api.py
 match_openaq.py
 verify_all.py
 uploads/
+*.log
+.vercel
 
